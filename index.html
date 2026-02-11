@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Twilight & Stories</title>
+<title>MJfess/title>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&family=Cormorant+Garamond:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
 
@@ -87,10 +87,29 @@ body{
 .home{position:absolute; top:18px; right:28px; font-size:26px; cursor:pointer;}
 
 /* NAVIGATION */
-.navLR{margin-top:50px; display:flex; justify-content:space-between; align-items:flex-end; position:relative;}
-.navLR button{min-width:160px; padding:12px 28px; border-radius:60px; font-size:14px; cursor:pointer;}
-.lock-icon-container{display:flex; flex-direction:column; align-items:center; font-size:14px; cursor:pointer; margin-bottom:-8px;}
-.lock-icon-container span{display:flex; flex-direction:column; align-items:center;}
+    .navLR{
+        flex-wrap:wrap;
+        gap:10px;
+        justify-content:center;
+    }
+    .navLR button{
+        min-width:auto;
+        width:45%;
+        padding:10px 0;
+        font-size:14px;
+    }
+    .lock-icon-container{
+        width:100%;
+        margin:8px 0 0 0;
+        flex-direction:row;
+        justify-content:center;
+        gap:6px;
+    }
+    .lock-icon-container span{
+        font-size:12px;
+    }
+}
+
 
 /* POPUP PIN */
 .popup-overlay{
@@ -379,3 +398,4 @@ renderChapters();
 </script>
 </body>
 </html>
+
