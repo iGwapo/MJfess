@@ -87,36 +87,10 @@ body{
 .home{position:absolute; top:18px; right:28px; font-size:26px; cursor:pointer;}
 
 /* NAVIGATION */
-.lock-icon-container{
-    display:flex;
-    flex-direction:column; /* ikon di atas, teks di bawah */
-    align-items:center;
-    justify-content:center;
-    margin-top:10px;
-    gap:6px;
-}
-
-.lock-icon-container span.lock-icon{
-    width:60px;
-    height:60px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:24px;
-    background:#fff;
-    border-radius:50%;
-    box-shadow:0 5px 15px rgba(0,0,0,0.2);
-    cursor:pointer;
-}
-
-.lock-icon-container span.lock-text{
-    font-size:12px;
-    color:var(--accent);
-    text-align:center;
-    max-width:100px;
-}
-}
-
+.navLR{margin-top:50px; display:flex; justify-content:space-between; align-items:flex-end; position:relative;}
+.navLR button{min-width:160px; padding:12px 28px; border-radius:60px; font-size:14px; cursor:pointer;}
+.lock-icon-container{display:flex; flex-direction:column; align-items:center; font-size:14px; cursor:pointer; margin-bottom:-8px;}
+.lock-icon-container span{display:flex; flex-direction:column; align-items:center;}
 
 /* POPUP PIN */
 .popup-overlay{
@@ -131,8 +105,10 @@ body{
 .popup-content input{padding:10px 16px; width:80%; margin-bottom:16px; border-radius:10px; border:1px solid #ccc; text-align:center;}
 .popup-content button{padding:10px 20px; border-radius:10px; border:none; background:var(--accent); color:#fff; cursor:pointer; margin:0 6px;}
 
-/* SONG POPUP CENTER */
-#songPopup.active{display:flex;}
+/* SONG POPUP VERTICAL CENTER */
+#songPopup.active{
+    display:flex;
+}
 #songPopup{
     display:none; position:fixed; top:0; left:0; width:100%; height:100%;
     justify-content:center; align-items:center; z-index:1000; background:rgba(0,0,0,0.4);
@@ -158,21 +134,6 @@ body{
 .paper-exit{animation:paperOut .5s;}
 @keyframes paperIn{from{transform:translateX(80px) skewX(-3deg); opacity:0;} to{transform:translateX(0); opacity:1;}}
 @keyframes paperOut{from{transform:translateX(0); opacity:1;} to{transform:translateX(-80px) skewX(3deg); opacity:0;}}
-
-/* RESPONSIVE FIXES */
-@media screen and (max-width:768px){
-    .header h1{font-size:32px;}
-    .header p{font-size:14px;}
-    #reader{padding:20px 15px 40px; font-size:16px;}
-    #chapterContent{font-size:16px; line-height:1.6;}
-    .navLR button{min-width:120px; padding:10px 18px; font-size:12px;}
-    .popup-content{padding:20px; max-width:90%; width:90%;}
-    #songPopup .popup-content{max-height:80vh; overflow-y:auto;}
-    #pinSuccess div img{width:100%; max-width:140px;}
-}
-@media screen and (min-width:769px){
-    #pinSuccess div img{width:48%; max-width:180px;}
-}
 </style>
 </head>
 <body>
@@ -211,16 +172,17 @@ body{
             </div>
             <p id="pinWarning" style="color:red; margin-top:10px;"></p>
         </div>
-        <div id="pinSuccess" style="display:none;">
-            <p style="color:rgb(166, 26, 161); font-weight:600; margin-bottom:10px;">
-                Happy Valentine’s Day, Andina. Get ready on Saturday, February 14th, 2026, from 2:00 PM to 5:00 PM WIB at Hafa Warehouse.
-            </p>
-            <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:10px;">
-                <img src="welcome.png" alt="Welcome" style="border-radius:12px;"/>
-                <img src="qr.png" alt="QR Code" style="border-radius:12px;"/>
-            </div>
-            <button onclick="closePinPopup()">Close</button>
-        </div>
+<div id="pinSuccess" style="display:none;">
+    <p style="color:rgb(166, 26, 161); font-weight:600; margin-bottom:10px;">
+        Happy Valentine’s Day, Andina. Get ready on Saturday, February 14th, 2026, from 2:00 PM to 5:00 PM WIB at Hafa Warehouse.
+    </p>
+    <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:10px;">
+        <img src="welcome.png" style="width:48%; max-width:180px; border-radius:12px;"/>
+        <img src="qr.png" style="width:48%; max-width:180px; border-radius:12px;"/>
+    </div>
+    <button onclick="closePinPopup()">Close</button>
+</div>
+
     </div>
 </div>
 
@@ -254,6 +216,7 @@ Ini pertama kalinya gw ngirim menfess di bot menfess gini. Tapi ya hidup cuma se
 For some reason, ngetik gini mungkin supaya keliatan keren aja, walaupun emg udh keren dari lahir. Ya oke, Thanks GOD... Udah, balik lagi ke topiknya.
 
 Mungkin isi pesan pada chapter 1 ini hanya sebatas kata pengantar aja. Btw bentar lagi ada 3 event tahunan, selamat merayakan semua. Thanks juga untuk beberapa orang yang bersedia menumpahkan ide dan memberikan sarannya. Otak gw rada stuck dalam milih lagu, jadi pilih yang ada di opsi aja, jangan nyari yang ga ada. `
+
 },
 {
 title:"Chapter 2 ",
@@ -297,6 +260,7 @@ Udah, itu aja.
 #TBKP2026`
 }
 ];
+
 
 let current=0;
 let musicStarted=false;
@@ -405,7 +369,3 @@ renderChapters();
 </script>
 </body>
 </html>
-
-
-
-
