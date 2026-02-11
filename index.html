@@ -88,7 +88,7 @@ body{
 
 /* NAVIGATION */
 .navLR{margin-top:50px; display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:10px; position:relative;}
-.navLR button{min-width:140px; padding:12px 20px; border-radius:60px; font-size:14px; cursor:pointer; flex:1;}
+.navLR button{min-width:160px; padding:12px 28px; border-radius:60px; font-size:14px; cursor:pointer; flex:1;}
 .lock-icon-container{
     display:flex; flex-direction:column; align-items:center; font-size:14px; cursor:pointer; gap:4px;
     margin:0 auto; margin-bottom:10px;
@@ -123,10 +123,8 @@ body{
 .popup-content input{padding:10px 16px; width:80%; margin-bottom:16px; border-radius:10px; border:1px solid #ccc; text-align:center;}
 .popup-content button{padding:10px 20px; border-radius:10px; border:none; background:var(--accent); color:#fff; cursor:pointer; margin:0 6px;}
 
-/* SONG POPUP VERTICAL CENTER */
-#songPopup.active{
-    display:flex;
-}
+/* SONG POPUP */
+#songPopup.active{display:flex;}
 #songPopup{
     display:none; position:fixed; top:0; left:0; width:100%; height:100%;
     justify-content:center; align-items:center; z-index:1000; background:rgba(0,0,0,0.4);
@@ -142,9 +140,6 @@ body{
     background:var(--accent); color:#fff; cursor:pointer; font-size:16px;
 }
 #songPopup .song-btn:hover{background:#b25d66;}
-#songPopup .popup-content::-webkit-scrollbar{width:6px;}
-#songPopup .popup-content::-webkit-scrollbar-thumb{background:rgba(201,123,132,0.7); border-radius:3px;}
-#songPopup .popup-content::-webkit-scrollbar-track{background:rgba(0,0,0,0.05); border-radius:3px;}
 
 /* SLIDE ANIMATION */
 @keyframes slideFadeIn{from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:translateY(0);}}
@@ -152,6 +147,17 @@ body{
 .paper-exit{animation:paperOut .5s;}
 @keyframes paperIn{from{transform:translateX(80px) skewX(-3deg); opacity:0;} to{transform:translateX(0); opacity:1;}}
 @keyframes paperOut{from{transform:translateX(0); opacity:1;} to{transform:translateX(-80px) skewX(3deg); opacity:0;}}
+
+/* MEDIA QUERIES HP */
+@media (max-width:600px){
+    .title{font-size:22px;}
+    #chapterContent{font-size:16px; line-height:1.6;}
+    .navLR button{min-width:120px; padding:10px 16px; font-size:12px;}
+    .music-btn{width:55px; height:55px; font-size:22px; left:15px; bottom:15px;}
+    .hint{left:80px; bottom:35px; font-size:11px; padding:6px 12px;}
+    .lock-icon{width:50px; height:50px; font-size:20px;}
+    .lock-text{font-size:11px;}
+}
 </style>
 </head>
 <body>
@@ -385,3 +391,4 @@ renderChapters();
 </script>
 </body>
 </html>
+
