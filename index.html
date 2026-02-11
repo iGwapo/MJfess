@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Twilight & Stories</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&family=Cormorant+Garamond:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --bg:#f6efe7;
+    --accent:#c97b84;
+    --text:#3a3a3a;
+}
+
+/* BASIC */
+*{box-sizing:border-box;}
+body{
+    margin:0;
+    background:var(--bg);
+    font-family:'Inter', sans-serif;
+    color:var(--text);
+}
+
+/* HEADER */
+.header{text-align:center; padding:60px 20px 30px;}
+.header h1{font-family:'Playfair Display', serif; font-size:42px; margin:0;}
+.header p{ color:#8c7f7f; }
+
+/* BUBBLE */
+.bubble{
+    background:linear-gradient(145deg, rgba(255,192,203,0.55), rgba(216,191,255,0.55));
+    backdrop-filter:blur(14px);
+    border:1px solid rgba(255,255,255,0.7);
+    box-shadow:inset 0 10px 18px rgba(255,255,255,.95), inset 0 -12px 18px rgba(138,43,226,.12), 0 18px 30px rgba(128,0,128,.25);
+    position:relative;
+    transition:.25s;
+    animation:floaty 4s ease-in-out infinite;
+}
+.bubble:active{transform:translateY(6px) scale(.97);}
+@keyframes floaty{
+    0%{transform:translateY(0);}
+    50%{transform:translateY(-6px);}
+    100%{transform:translateY(0);}
+}
+
+/* MUSIC BUTTON */
+.music-btn{
+    position:fixed;
+    left:25px; bottom:25px;
+    width:70px; height:70px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:26px; cursor:pointer;
+    z-index:999;
+}
+.hint{
+    position:fixed;
+    left:110px; bottom:45px;
+    font-size:13px;
+    background:rgba(255,255,255,.8);
+    padding:8px 16px;
+    border-radius:20px;
+    color:#555;
+    transition:.4s;
+}
+.hint.hide{opacity:0; transform:translateY(10px);}
+
+/* CONTAINER */
+.container{max-width:860px; margin:0 auto 60px; padding:0 20px;}
+.chapter{background:#fff; padding:18px 22px; margin:14px 0; border-radius:14px; box-shadow:0 10px 25px rgba(0,0,0,0.06); cursor:pointer; border-left:6px solid var(--accent); transition:.3s;}
+.chapter:hover{transform:translateY(-4px);}
+.locked{filter:blur(3px); pointer-events:none; opacity:.6;}
+
+/* READER */
+#reader{
+    display:none; position:relative; background:#fff;
+    padding:40px 40px 60px; border-radius:18px;
+    box-shadow:0 15px 35px rgba(0,0,0,0.08);
+    line-height:1.8; font-size:18px; text-align:justify; white-space:pre-line;
+}
+
+/* TITLE & CONTENT */
+.title{font-family:'DM Serif Display', serif; font-size:28px; letter-spacing:.5px; color:#4b3b4f; text-align:center; margin-bottom:20px; font-style:italic;}
+#chapterContent{font-family:'Cormorant Garamond', serif; font-size:20px; line-height:2; letter-spacing:.4px; color:#4a3a4f;}
+.home{position:absolute; top:18px; right:28px; font-size:26px; cursor:pointer;}
+
+/* NAVIGATION */
+.navLR{margin-top:50px; display:flex; justify-content:space-between; align-items:flex-end; position:relative;}
+.navLR button{min-width:160px; padding:12px 28px; border-radius:60px; font-size:14px; cursor:pointer;}
+.lock-icon-container{display:flex; flex-direction:column; align-items:center; font-size:14px; cursor:pointer; margin-bottom:-8px;}
+.lock-icon-container span{display:flex; flex-direction:column; align-items:center;}
+
+/* POPUP PIN */
+.popup-overlay{
+    display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+    background:rgba(0,0,0,0.6); justify-content:center; align-items:center;
+    z-index:1000; animation:slideFadeIn 0.5s;
+}
+.popup-content{
+    background:#fff; padding:30px 40px; border-radius:18px;
+    text-align:center; max-width:400px; box-shadow:0 15px 35px rgba(0,0,0,0.15);
+}
+.popup-content input{padding:10px 16px; width:80%; margin-bottom:16px; border-radius:10px; border:1px solid #ccc; text-align:center;}
+.popup-content button{padding:10px 20px; border-radius:10px; border:none; background:var(--accent); color:#fff; cursor:pointer; margin:0 6px;}
+
+/* SONG POPUP VERTICAL CENTER */
+#songPopup.active{
+    display:flex;
+}
+#songPopup{
+    display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+    justify-content:center; align-items:center; z-index:1000; background:rgba(0,0,0,0.4);
+}
+#songPopup .popup-content{
+    width:90%; max-width:350px; max-height:300px;
+    overflow-y:auto; padding:20px; border-radius:18px;
+    display:flex; flex-direction:column; gap:10px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.15);
+}
+#songPopup .song-btn{
+    padding:12px 20px; border-radius:14px; border:none;
+    background:var(--accent); color:#fff; cursor:pointer; font-size:16px;
+}
+#songPopup .song-btn:hover{background:#b25d66;}
+#songPopup .popup-content::-webkit-scrollbar{width:6px;}
+#songPopup .popup-content::-webkit-scrollbar-thumb{background:rgba(201,123,132,0.7); border-radius:3px;}
+#songPopup .popup-content::-webkit-scrollbar-track{background:rgba(0,0,0,0.05); border-radius:3px;}
+
+/* SLIDE ANIMATION */
+@keyframes slideFadeIn{from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:translateY(0);}}
+.paper-enter{animation:paperIn .6s;}
+.paper-exit{animation:paperOut .5s;}
+@keyframes paperIn{from{transform:translateX(80px) skewX(-3deg); opacity:0;} to{transform:translateX(0); opacity:1;}}
+@keyframes paperOut{from{transform:translateX(0); opacity:1;} to{transform:translateX(-80px) skewX(3deg); opacity:0;}}
+</style>
+</head>
+<body>
+
+<div class="music-btn bubble" id="musicIcon">▶</div>
+<div class="hint" id="hintText">Tap this bubble first to select music 🎵</div>
+
+<div class="header">
+    <h1>A Love Letter for @iGwapa</h1>
+    <p>read slowly, felt quietly.</p>
+</div>
+
+<div class="container">
+    <div id="chapterList" class="locked"></div>
+    <div id="reader">
+        <div class="home" onclick="goHome()">⌂</div>
+        <div class="title" id="chapterTitle"></div>
+        <div id="chapterContent"></div>
+        <div class="navLR locked" id="navButtons">
+            <button class="bubble" onclick="prevChapter()">← Previous</button>
+            <div id="lockIconContainer" class="lock-icon-container"></div>
+            <button class="bubble" onclick="nextChapter()">Next →</button>
+        </div>
+    </div>
+</div>
+
+<!-- PIN POPUP -->
+<div id="pinPopup" class="popup-overlay">
+    <div class="popup-content">
+        <div id="pinEntry">
+            <p>Enter the PIN to unlock the message:</p>
+            <input type="text" id="pinInput" placeholder="Enter PIN"/>
+            <div>
+                <button onclick="checkPin()">Unlock</button>
+                <button onclick="closePinPopup()">Cancel</button>
+            </div>
+            <p id="pinWarning" style="color:red; margin-top:10px;"></p>
+        </div>
+<div id="pinSuccess" style="display:none;">
+    <p style="color:rgb(166, 26, 161); font-weight:600; margin-bottom:10px;">
+        Happy Valentine’s Day, Andina. Get ready on Saturday, February 14th, 2026, from 2:00 PM to 5:00 PM WIB at Hafa Warehouse.
+    </p>
+    <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:10px;">
+        <img src="welcome.png" style="width:48%; max-width:180px; border-radius:12px;"/>
+        <img src="qr.png" style="width:48%; max-width:180px; border-radius:12px;"/>
+    </div>
+    <button onclick="closePinPopup()">Close</button>
+</div>
+
+    </div>
+</div>
+
+<!-- SONG POPUP CENTER -->
+<div id="songPopup">
+    <div class="popup-content">
+        <p style="font-weight:600;margin-bottom:12px;">Select a song to play:</p>
+        <button class="song-btn" onclick="selectMusic('music/Lagu1.mp3')">⋆.˚</button>
+        <button class="song-btn" onclick="selectMusic('music/Lagu2.mp3')">ℳ</button>
+        <button class="song-btn" onclick="selectMusic('music/Lagu3.mp3')">.☘︎ ݁˖</button>
+        <button class="song-btn" onclick="selectMusic('music/Lagu4.mp3')">𐔌՞. .՞𐦯</button>
+        <button class="song-btn" onclick="selectMusic('music/Lagu5.mp3')">It's U</button>
+        <button class="song-btn" onclick="selectMusic('music/YSTO.m4a')">You're Still The One</button>
+        <button class="song-btn" onclick="selectMusic('music/Lagu7.mp3')">Pretty</button>
+        <button class="song-btn" onclick="selectMusic('music/Lagu8.mp3')">Oh to be Loved...</button>
+        <button class="song-btn" onclick="selectMusic('music/Pujaanku_MJ.mp3')">☕︎</button>
+        <button class="song-btn" onclick="selectMusic('music/Lagu10.mp3')">❦</button>
+    </div>
+</div>
+
+<audio id="bgMusic" loop></audio>
+
+<script>
+const story = [
+{
+title:"Chapter 1",
+content:`Nothing complicated.
+Just a few words meant for those who matter.
+
+Ini pertama kalinya gw ngirim menfess di bot menfess gini. Tapi ya hidup cuma sekali, ga ada salahnya nyoba sekali. Ga ada salahnya fomo, namanya juga manusia hahahaha. 
+For some reason, ngetik gini mungkin supaya keliatan keren aja, walaupun emg udh keren dari lahir. Ya oke, Thanks GOD... Udah, balik lagi ke topiknya.
+
+Mungkin isi pesan pada chapter 1 ini hanya sebatas kata pengantar aja. Btw bentar lagi ada 3 event tahunan, selamat merayakan semua. Thanks juga untuk beberapa orang yang bersedia menumpahkan ide dan memberikan sarannya. Otak gw rada stuck dalam milih lagu, jadi pilih yang ada di opsi aja, jangan nyari yang ga ada. `
+
+},
+{
+title:"Chapter 2 ",
+content:`Regardless of how our lives turn out, forever & always w MJ.
+
+Hello, sweetheart. it’s J checking in. How has ur holiday been so far?
+And how do u plan to welcome Valentine’s Day this year?
+
+It seems I won’t be able to come home as I usually do.
+There’s a quiet sadness in that thought.
+But at least this (nolep) circle (TBKP) of ours will be there to keep u company on that day.
+
+Or perhaps… u might try something a little unexpected.
+Something I’m not entirely sure u’ll enjoy, but I thought of u.
+
+Would u be willing to spend some time in a baking class, filling a quiet Valentine’s Day with something sweet?
+I know how much u love baking, and I’ve already reserved a seat for u, along with some experiences waiting to be discovered.
+
+We’ll only know how it feels once u enter that sacred date as the PIN.
+
+Until then, savor the moment.
+And happy Valentine’s Day, my love.`
+},
+{
+title:"Chapter 3",
+content:`For those who stand and stay. We can't skip the hard part, because it's gonna help us grow. 
+
+And to the rest of TBKP,
+thank you for being the quiet constants,
+the meme in between boring days,
+and the warmth that lingers even from a distance.
+
+Walau kadang gc nya ramai sesuai mood, kadang nolep, kadang sok sibuk? Terkadang dari shift malam yang galau to random “wtf” moments wkwkwkwk.
+
+Semoga tahun ini makin banyak yang nolep, biar ga mati gc nya. 
+Surrounded by small joys, Jokes sarkas yang penuh klarif, and Adalah pokoknya... HAHAHAHA
+
+Udah, itu aja.
+
+#Prinsip
+#TBKP2026`
+}
+];
+
+
+let current=0;
+let musicStarted=false;
+let selectedMusic=null;
+const pinCode="1306";
+
+const chapterList=document.getElementById("chapterList");
+const reader=document.getElementById("reader");
+const chapterTitle=document.getElementById("chapterTitle");
+const chapterContent=document.getElementById("chapterContent");
+const navButtons=document.getElementById("navButtons");
+const hint=document.getElementById("hintText");
+const music=document.getElementById("bgMusic");
+const icon=document.getElementById("musicIcon");
+const lockIconContainer=document.getElementById("lockIconContainer");
+const pinPopup=document.getElementById("pinPopup");
+const pinInput=document.getElementById("pinInput");
+const pinWarning=document.getElementById("pinWarning");
+const songPopup=document.getElementById("songPopup");
+
+function renderChapters(){
+    story.forEach((c,i)=>{
+        const el=document.createElement("div");
+        el.className="chapter";
+        el.innerText=c.title;
+        el.onclick=()=>openChapter(i);
+        chapterList.appendChild(el);
+    });
+}
+
+function openChapter(i){
+    if(!musicStarted) return;
+    current=i;
+    chapterList.style.display="none";
+    reader.style.display="block";
+    switchChapter();
+}
+
+function goHome(){
+    reader.style.display="none";
+    chapterList.style.display="block";
+    lockIconContainer.innerHTML="";
+}
+
+function nextChapter(){if(current<story.length-1){current++; switchChapter();}}
+function prevChapter(){if(current>0){current--; switchChapter();}}
+
+function switchChapter(){
+    chapterContent.className="paper-exit";
+    setTimeout(()=>{
+        chapterTitle.innerText=story[current].title;
+        chapterContent.innerText=story[current].content;
+        chapterContent.className="paper-enter";
+
+        if(current===1){
+            lockIconContainer.innerHTML='<span onclick="showPinPopup()" class="bubble" style="width:60px;height:60px;display:flex;align-items:center;justify-content:center;font-size:24px;background:#fff;border-radius:50%;box-shadow:0 5px 15px rgba(0,0,0,0.2);">🔒</span><span style="font-size:12px; color:#c97b84; margin-top:4px;">Click this lock if you know the PIN</span>';
+        } else { lockIconContainer.innerHTML=""; }
+    },300);
+}
+
+// Music
+icon.addEventListener("click",()=>{
+    if(!musicStarted){ songPopup.classList.add("active"); }
+    else toggleMusic();
+});
+
+function selectMusic(src){
+    selectedMusic=src;
+    music.src=src;
+    music.play().then(()=>{
+        icon.innerHTML="⏸";
+        musicStarted=true;
+        chapterList.classList.remove("locked");
+        navButtons.classList.remove("locked");
+        hint.classList.add("hide");
+        songPopup.classList.remove("active");
+    });
+}
+
+function toggleMusic(){if(music.paused){music.play(); icon.innerHTML="⏸";} else {music.pause(); icon.innerHTML="▶";}}
+
+// PIN Popup
+function showPinPopup(){
+    pinInput.value="";
+    pinWarning.innerText="";
+    document.getElementById("pinEntry").style.display="block";
+    document.getElementById("pinSuccess").style.display="none";
+    pinPopup.style.display="flex";
+}
+function closePinPopup(){pinPopup.style.display="none";}
+function checkPin(){
+    const pinEntryDiv = document.getElementById("pinEntry");
+    const pinSuccessDiv = document.getElementById("pinSuccess");
+    const pinInputVal = pinInput.value;
+
+    if(pinInputVal===pinCode){
+        pinEntryDiv.style.display="none";
+        pinSuccessDiv.style.display="block";
+    } else {
+        pinWarning.style.color="red";
+        pinWarning.innerText="Wrong PIN! Try again.";
+    }
+}
+
+renderChapters();
+</script>
+</body>
+</html>
