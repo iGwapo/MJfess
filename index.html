@@ -76,7 +76,7 @@ body{
 /* READER */
 #reader{
     display:none; position:relative; background:#fff;
-    padding:40px 40px 60px; border-radius:18px;
+    padding:40px 20px 60px; border-radius:18px;
     box-shadow:0 15px 35px rgba(0,0,0,0.08);
     line-height:1.8; font-size:18px; text-align:justify; white-space:pre-line;
 }
@@ -87,35 +87,28 @@ body{
 .home{position:absolute; top:18px; right:28px; font-size:26px; cursor:pointer;}
 
 /* NAVIGATION */
+.navLR{margin-top:50px; display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:10px; position:relative;}
+.navLR button{min-width:140px; padding:12px 20px; border-radius:60px; font-size:14px; cursor:pointer; flex:1;}
 .lock-icon-container{
-    display:flex;
-    flex-direction:column; /* ikon di atas, teks di bawah */
-    align-items:center;
-    justify-content:center;
-    margin-top:10px;
-    gap:6px;
+    display:flex; flex-direction:column; align-items:center; font-size:14px; cursor:pointer; gap:4px;
+    margin:0 auto; margin-bottom:10px;
 }
-
-.lock-icon-container span.lock-icon{
+.lock-icon {
+    display:flex;
+    justify-content:center;
+    align-items:center;
     width:60px;
     height:60px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
     font-size:24px;
     background:#fff;
     border-radius:50%;
     box-shadow:0 5px 15px rgba(0,0,0,0.2);
-    cursor:pointer;
 }
-
-.lock-icon-container span.lock-text{
+.lock-text {
     font-size:12px;
     color:var(--accent);
     text-align:center;
-    max-width:100px;
 }
-
 
 /* POPUP PIN */
 .popup-overlay{
@@ -177,9 +170,9 @@ body{
         <div class="home" onclick="goHome()">⌂</div>
         <div class="title" id="chapterTitle"></div>
         <div id="chapterContent"></div>
+        <div class="lock-icon-container" id="lockIconContainer"></div>
         <div class="navLR locked" id="navButtons">
             <button class="bubble" onclick="prevChapter()">← Previous</button>
-            <div id="lockIconContainer" class="lock-icon-container"></div>
             <button class="bubble" onclick="nextChapter()">Next →</button>
         </div>
     </div>
@@ -207,7 +200,6 @@ body{
     </div>
     <button onclick="closePinPopup()">Close</button>
 </div>
-
     </div>
 </div>
 
@@ -231,6 +223,7 @@ body{
 <audio id="bgMusic" loop></audio>
 
 <script>
+// STORY DATA
 const story = [
 {
 title:"Chapter 1",
@@ -241,10 +234,9 @@ Ini pertama kalinya gw ngirim menfess di bot menfess gini. Tapi ya hidup cuma se
 For some reason, ngetik gini mungkin supaya keliatan keren aja, walaupun emg udh keren dari lahir. Ya oke, Thanks GOD... Udah, balik lagi ke topiknya.
 
 Mungkin isi pesan pada chapter 1 ini hanya sebatas kata pengantar aja. Btw bentar lagi ada 3 event tahunan, selamat merayakan semua. Thanks juga untuk beberapa orang yang bersedia menumpahkan ide dan memberikan sarannya. Otak gw rada stuck dalam milih lagu, jadi pilih yang ada di opsi aja, jangan nyari yang ga ada. `
-
 },
 {
-title:"Chapter 2 ",
+title:"Chapter 2",
 content:`Regardless of how our lives turn out, forever & always w MJ.
 
 Hello, sweetheart. it’s J checking in. How has ur holiday been so far?
@@ -286,7 +278,6 @@ Udah, itu aja.
 }
 ];
 
-
 let current=0;
 let musicStarted=false;
 let selectedMusic=null;
@@ -306,6 +297,7 @@ const pinInput=document.getElementById("pinInput");
 const pinWarning=document.getElementById("pinWarning");
 const songPopup=document.getElementById("songPopup");
 
+// RENDER CHAPTERS
 function renderChapters(){
     story.forEach((c,i)=>{
         const el=document.createElement("div");
@@ -316,6 +308,7 @@ function renderChapters(){
     });
 }
 
+// OPEN / NAVIGATION
 function openChapter(i){
     if(!musicStarted) return;
     current=i;
@@ -323,13 +316,11 @@ function openChapter(i){
     reader.style.display="block";
     switchChapter();
 }
-
 function goHome(){
     reader.style.display="none";
     chapterList.style.display="block";
     lockIconContainer.innerHTML="";
 }
-
 function nextChapter(){if(current<story.length-1){current++; switchChapter();}}
 function prevChapter(){if(current>0){current--; switchChapter();}}
 
@@ -341,17 +332,19 @@ function switchChapter(){
         chapterContent.className="paper-enter";
 
         if(current===1){
-            lockIconContainer.innerHTML='<span onclick="showPinPopup()" class="bubble" style="width:60px;height:60px;display:flex;align-items:center;justify-content:center;font-size:24px;background:#fff;border-radius:50%;box-shadow:0 5px 15px rgba(0,0,0,0.2);">🔒</span><span style="font-size:12px; color:#c97b84; margin-top:4px;">Click this lock if you know the PIN</span>';
+            lockIconContainer.innerHTML = `
+                <span onclick="showPinPopup()" class="lock-icon">🔒</span>
+                <span class="lock-text">Click this lock if you know the PIN</span>
+            `;
         } else { lockIconContainer.innerHTML=""; }
     },300);
 }
 
-// Music
+// MUSIC
 icon.addEventListener("click",()=>{
     if(!musicStarted){ songPopup.classList.add("active"); }
     else toggleMusic();
 });
-
 function selectMusic(src){
     selectedMusic=src;
     music.src=src;
@@ -364,10 +357,9 @@ function selectMusic(src){
         songPopup.classList.remove("active");
     });
 }
-
 function toggleMusic(){if(music.paused){music.play(); icon.innerHTML="⏸";} else {music.pause(); icon.innerHTML="▶";}}
 
-// PIN Popup
+// PIN POPUP
 function showPinPopup(){
     pinInput.value="";
     pinWarning.innerText="";
@@ -380,7 +372,6 @@ function checkPin(){
     const pinEntryDiv = document.getElementById("pinEntry");
     const pinSuccessDiv = document.getElementById("pinSuccess");
     const pinInputVal = pinInput.value;
-
     if(pinInputVal===pinCode){
         pinEntryDiv.style.display="none";
         pinSuccessDiv.style.display="block";
@@ -394,4 +385,3 @@ renderChapters();
 </script>
 </body>
 </html>
-
